@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Classroom_Work_01</title>
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <div id="app"></div>
+
+    <script type="text/babel">
+    // Реализовать валидацию формы регистрации на сайте с помощью React
+
+    class MyComponent extends React.Component{
+        constructor(props){
+            super(props);
+            this.state = props;
+            this.state.input = false;
+
+            this.state.message_email = '';
+            this.state.message_login = '';
+            this.state.message_password = '';
+            this.state.message_password_repeat = '';
+
+            this.handleSubmit = this.handleSubmit.bind(this);
+        }
+
+    handleSubmit(event) {
+        var reEmail = /\w+@\w+\.\w+/;
+        var reLogin = /\w{3,}/;
+        var rePassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+        var check = true;
+
+        
+        this.setState({message_email: ''});
+        this.setState({message_login: ''});
+        this.setState({message_password: ''});
+        this.setState({message_password_repeat: ''});
+
+        if(event.target.email.value === ""){
+            this.setState({message_email: "Email is empty"})
+            check = false;
+        } else if (!reEmail.test(event.target.email.value)){
+            this.setState({message_email: "Email incorrect"})
+            check = false;
+        }
+
+        if(event.target.login.value === ""){
+            this.setState({message_login: "Login is empty"})
+            check = false;
+        } else if (!reLogin.test(event.target.login.value)){
+            this.setState({message_login: "Login incorrect"})
+            check = false;
+        }
+
+        if(event.target.password.value === ""){
+            this.setState({message_password: "Password is empty"})
+            check = false;
+        } else if (!rePassword.test(event.target.password.value)){
+            this.setState({message_password: "Password incorrect"})
+            check = false;
+        }
+
+        if(event.target.password_repeat.value === ""){
+            this.setState({message_password_repeat: "Password repeat is empty"})
+            check = false;
+        } else if (event.target.password.value != event.target.password_repeat.value){
+            this.setState({message_password_repeat: "Password repeat do not match"})
+            check = false;
+        }
+        
+        if(check){
+            this.setState({input: true})
+        }
+        
+        event.preventDefault();
+    }
+
+        render(){
+            if(this.state.input)
+                return <h1> Вход произошел успешно!</h1>;
+            return (
+                <>
+                    <form onSubmit={this.handleSubmit} metod="post">
+                        <p><label>Email: <input type="text" name="email" placeholder="Email"/></label></p>
+                        <span>{this.state.message_email}</span>
+                        <p><label>Login: <input type="text" name="login" placeholder="Login"/></label></p>
+                        <span>{this.state.message_login}</span>
+                        <p><label>Password: <input type="text" name="password" placeholder="Password"/></label></p>
+                        <span>{this.state.message_password}</span>
+                        <p><label>Password: <input type="text" name="password_repeat" placeholder="Password repeat"/></label></p>
+                        <span>{this.state.message_password_repeat}</span>
+
+                        <p><input type="submit" value="Send" /></p>
+                    </form>
+                </>
+            );
+        }
+    }
+
+        ReactDOM.render(
+            <MyComponent />,
+            document.getElementById('app')
+        );
+    </script>
+</body>
+</html>
